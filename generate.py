@@ -3,13 +3,20 @@ import re
 import pypandoc
 
 filters = ['filter.py']
-pandoc_arguments = ['--standalone', '--toc', '--smart', '--html-q-tags']
+pandoc_arguments = ['--standalone',
+                    '--toc',
+                    '--smart',
+                    '--html-q-tags']
 
 
 def generate(markdown, theme='Default'):
     '''Takes a markdown string and returns a full HTML document, ready to save.'''
-    css_location = os.path.join('themes', '{0}.css'.format(theme))
-    pandoc_arguments.append('--css={0}'.format(css_location))
+    css_name = '{0}.css'.format(theme)
+
+    pandoc_arguments.append('--include-in-header={0}'.format(os.path.join('themes', 'before.html')))
+    pandoc_arguments.append('--include-in-header={0}'.format(os.path.join('themes', css_name)))
+    pandoc_arguments.append('--include-in-header={0}'.format(os.path.join('themes', 'after.html')))
+    #pandoc_arguments.append('--css={0}'.format(css_location))
 
     return pypandoc.convert_text(markdown, 'html', format='md',
                                  extra_args=pandoc_arguments, filters=filters)
