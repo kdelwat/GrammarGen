@@ -42,6 +42,8 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
         markdown_filename = self.markdown_path_input.text()
         output_filename = self.output_path_input.text()
 
+        theme = self.theme_choice.currentText()
+
         try:
             with open(markdown_filename, 'r') as f:
                 input_text = f.read()
