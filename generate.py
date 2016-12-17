@@ -2,7 +2,7 @@ import os
 import pypandoc
 
 filters = ['filter.py']
-pandoc_arguments = ['--standalone', '--toc']
+pandoc_arguments = ['--standalone', '--toc', '--smart', '--html-q-tags']
 
 
 def generate(markdown, theme='Default'):
