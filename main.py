@@ -11,16 +11,6 @@ import generate
 main_window, qt_base_class = uic.loadUiType('app.ui')
 
 
-def ensure_pandoc_exists():
-    '''Check the current Pandoc version. If it isn't installed, download it using
-    pypandoc.
-    '''
-    try:
-        pypandoc.get_pandoc_version()
-    except OSError:
-        pypandoc.pypandoc.pandoc_download()
-
-
 class GrammarGenApp(QtWidgets.QMainWindow, main_window):
     '''The main application class.'''
     def __init__(self):
@@ -28,7 +18,8 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
         main_window.__init__(self)
         self.setupUi(self)
 
-        # Clear progress bar
+        self.check_pandoc_on_startup()
+
         self.clear_progress(stages=4)
 
         # Connect inputs to handlers
@@ -90,6 +81,30 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
 
         with open(output_filename, 'w') as f:
             f.write(output_text)
+
+    def check_pandoc_on_startup(self):
+        '''On startup, checks if pandoc is installed. If it is, continues to main
+        application. Otherwise, prompts the user to install.'''
+        try:
+            version = pypandoc.get_pandoc_version()
+            self.status_bar.showMessage('Found pandoc version {0}'.format(version))
+
+        except OSError:
+            error_string = '''GrammarGen could not find a local installation of Pandoc.
+If you have already installed it, check that it is in your PATH.
+Otherwise, GrammarGen can install it automatically. Proceed with installation?'''
+
+            download_prompt = QtWidgets.QMessageBox.question(self,
+                                                             'Pandoc not found',
+                                                             error_string,
+                                                             QtWidgets.QMessageBox.Yes |
+                                                             QtWidgets.QMessageBox.No,
+                                                             QtWidgets.QMessageBox.No)
+
+            if download_prompt == QtWidgets.QMessageBox.Yes:
+                pypandoc.pandoc_download.download_pandoc()
+            else:
+                sys.exit(0)
 
 
 def main():
