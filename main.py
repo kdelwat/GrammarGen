@@ -20,7 +20,7 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
 
         self.check_pandoc_on_startup()
 
-        self.clear_progress(stages=4)
+        self.clear_progress(stages=3)
 
         # Connect inputs to handlers
         self.markdown_path_select.clicked.connect(self.select_markdown_file)
@@ -55,20 +55,8 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
     def generate(self):
         '''Generate the HTML file.'''
         self.update_progress('Loading Markdown...')
-        time.sleep(1)
-        self.update_progress('Generating HTML...')
-        time.sleep(1)
-        self.update_progress('Styling output...')
-        time.sleep(1)
-        self.update_progress('Saving HTML...')
-        time.sleep(1)
-        self.clear_progress(4)
 
         markdown_filename = self.markdown_path_input.text()
-        output_filename = self.output_path_input.text()
-
-        theme = self.theme_choice.currentText()
-
         try:
             with open(markdown_filename, 'r') as f:
                 input_text = f.read()
@@ -77,10 +65,19 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
             self.status_bar.showMessage('ERROR: Markdown file not found!')
             return False
 
+        self.update_progress('Generating HTML...')
+
+        theme = self.theme_choice.currentText()
         output_text = generate.generate(input_text, theme)
 
+        self.update_progress('Saving HTML...')
+
+        output_filename = self.output_path_input.text()
         with open(output_filename, 'w') as f:
             f.write(output_text)
+
+        self.clear_progress(3)
+        self.status_bar.showMessage('Successfully generated HTML')
 
     def check_pandoc_on_startup(self):
         '''On startup, checks if pandoc is installed. If it is, continues to main
