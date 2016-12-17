@@ -25,6 +25,7 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
 
         # Connect inputs to handlers
         self.markdown_path_select.clicked.connect(self.select_markdown_file)
+        self.lexicon_path_select.clicked.connect(self.select_lexicon_file)
         self.output_path_select.clicked.connect(self.select_output_file)
         self.generate_button.clicked.connect(self.generate)
 
@@ -49,6 +50,10 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
         filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Select file')
         self.markdown_path_input.setText(filename[0])
 
+    def select_lexicon_file(self):
+        filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Select file')
+        self.lexicon_path_input.setText(filename[0])
+
     def select_output_file(self):
         filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Create file')
         self.output_path_input.setText(filename[0])
@@ -72,7 +77,8 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
         output_text = generate.generate(input_text, theme)
 
         self.update_progress('Loading definitions...')
-        with open('lexicon.csv', 'r') as f:
+        lexicon_filename = self.lexicon_path_input.text()
+        with open(lexicon_filename, 'r') as f:
             csv_reader = csv.reader(f)
             lexicon = [line for line in csv_reader]
 
