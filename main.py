@@ -27,6 +27,7 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
         # Connect inputs to handlers
         self.markdown_path_select.clicked.connect(self.select_markdown_file)
         self.output_path_select.clicked.connect(self.select_output_file)
+        self.generate_button.clicked.connect(self.generate)
 
     def select_markdown_file(self):
         filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Select file')
@@ -35,6 +36,18 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
     def select_output_file(self):
         filename = QtWidgets.QFileDialog.getSaveFileName(self, 'Create file')
         self.output_path_input.setText(filename[0])
+
+    def generate(self):
+        '''Generate the HTML file.'''
+        markdown_filename = self.markdown_path_input.text()
+        output_filename = self.output_path_input.text()
+
+        try:
+            with open(markdown_filename, 'r') as f:
+                input_text = f.read()
+                print(input_text)
+        except FileNotFoundError:
+            pass
 
 
 def main():
