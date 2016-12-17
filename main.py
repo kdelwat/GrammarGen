@@ -3,6 +3,8 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import pypandoc
 
+import generate
+
 # Initialise GUI layout from Qt Designer file
 main_window, qt_base_class = uic.loadUiType('app.ui')
 
@@ -49,7 +51,13 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
                 input_text = f.read()
                 print(input_text)
         except FileNotFoundError:
-            pass
+            self.status_bar.showMessage('ERROR: Markdown file not found!')
+            return False
+
+        output_text = generate.generate(input_text, theme)
+
+        with open(output_filename, 'w') as f:
+            f.write(output_text)
 
 
 def main():

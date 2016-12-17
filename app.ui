@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>641</width>
-    <height>170</height>
+    <height>164</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,7 +99,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="status_bar"/>
   <action name="actionMarkdown_reference">
    <property name="text">
     <string>Markdown reference</string>
