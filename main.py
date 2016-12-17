@@ -1,4 +1,10 @@
+import sys
+
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import pypandoc
+
+# Initialise GUI layout from Qt Designer file
+main_window, qt_base_class = uic.loadUiType('app.ui')
 
 
 def ensure_pandoc_exists():
@@ -11,8 +17,19 @@ def ensure_pandoc_exists():
         pypandoc.pypandoc.pandoc_download()
 
 
+class GrammarGenApp(QtWidgets.QMainWindow, main_window):
+    '''The main application class.'''
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+        main_window.__init__(self)
+        self.setupUi(self)
+
+
 def main():
-    ensure_pandoc_exists()
+    app = QtWidgets.QApplication(sys.argv)
+    window = GrammarGenApp()
+    window.show()
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
