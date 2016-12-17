@@ -1,6 +1,7 @@
 import sys
 import math
 import time
+import csv
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 import pypandoc
@@ -20,7 +21,7 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
 
         self.check_pandoc_on_startup()
 
-        self.clear_progress(stages=3)
+        self.clear_progress(stages=4)
 
         # Connect inputs to handlers
         self.markdown_path_select.clicked.connect(self.select_markdown_file)
@@ -70,13 +71,20 @@ class GrammarGenApp(QtWidgets.QMainWindow, main_window):
         theme = self.theme_choice.currentText()
         output_text = generate.generate(input_text, theme)
 
+        self.update_progress('Loading definitions...')
+        with open('lexicon.csv', 'r') as f:
+            csv_reader = csv.reader(f)
+            lexicon = [line for line in csv_reader]
+
+        output_text = generate.load_words_from_lexicon(output_text, lexicon)
+
         self.update_progress('Saving HTML...')
 
         output_filename = self.output_path_input.text()
         with open(output_filename, 'w') as f:
             f.write(output_text)
 
-        self.clear_progress(3)
+        self.clear_progress(4)
         self.status_bar.showMessage('Successfully generated HTML')
 
     def check_pandoc_on_startup(self):

@@ -47,33 +47,15 @@ def create_rule(rule_list):
     return RawBlock('html', html)
 
 
-def lookup_definition(word):
-    with open('src/data/lexicon.csv', 'r') as f:
-        for line in csv.DictReader(f):
-            if line['Conword'] == word:
-                return line
-
-    return False
-
-
 def create_definition(item):
     word = item['c'][1].strip()
-    definition = lookup_definition(word)
-
-    if definition == False:
-        return Str(word)
-
-    html = '<span class="word">{0}<span class="definition">{1}<br><span class="full-definition">{2}</span></span></span>'.format(word, definition['Local'], definition['Definitions'])
-    return RawInline('html', html)
-
+    return RawInline('html', '{{' + word + '}}')
 
 def filter_paragraph(paragraph):
     filtered = []
     for item in paragraph:
         if item['t'] == 'Code':
-            #filtered.append(create_definition(item))
-            pass
-
+            filtered.append(create_definition(item))
         else:
             filtered.append(item)
     return Para(filtered)
