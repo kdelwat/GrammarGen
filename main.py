@@ -1,9 +1,8 @@
 import sys
 import math
-import time
 import csv
 
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5 import QtWidgets, uic
 import pypandoc
 
 import generate
