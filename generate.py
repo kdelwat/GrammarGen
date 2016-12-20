@@ -3,16 +3,19 @@ import re
 import pypandoc
 
 filters = ['filter.py']
-pandoc_arguments = ['--standalone',
-                    '--toc',
-                    '--smart',
-                    '--html-q-tags']
 
 
 def generate(markdown, theme='Default'):
     '''Takes a markdown string and returns a full HTML document, ready to save.'''
+    pandoc_arguments = ['--standalone',
+                        '--toc',
+                        '--smart',
+                        '--html-q-tags']
+
+    html_name = '{0}.html'.format(theme)
     css_name = '{0}.css'.format(theme)
 
+    pandoc_arguments.append('--include-in-header={0}'.format(os.path.join('themes', html_name)))
     pandoc_arguments.append('--include-in-header={0}'.format(os.path.join('themes', 'before.html')))
     pandoc_arguments.append('--include-in-header={0}'.format(os.path.join('themes', css_name)))
     pandoc_arguments.append('--include-in-header={0}'.format(os.path.join('themes', 'after.html')))
