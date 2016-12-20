@@ -53,8 +53,8 @@ def lookup_definition(word, lexicon):
 
 
 def create_html_definition(word, definition, full_definition, part_of_speech):
-    html_string = '''<span class="word">{0} ({1})
-    <span class="definition">{2}<br>
+    html_string = '''<span class="word">{0}
+    <span class="definition">{2} ({1})<br>
         <span class="full-definition">{3}</span>
     </span>
 </span>'''
